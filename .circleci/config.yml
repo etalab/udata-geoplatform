@@ -1,0 +1,123 @@
+---
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: udata/circleci
+      - image: mongo:3.2
+      - image: redis
+      - image: udata/elasticsearch:2.4.5
+    environment:
+       BASH_ENV: /root/.bashrc
+    steps:
+      - checkout
+      - run:
+          name: Compute Python dependencies key
+          command: cat requirements/*.pip > python.deps
+      - run:
+          name: Get the base reference branch
+          command: export BASE_BRANCH=$(base_branch)
+      - restore_cache:
+          keys:
+          - py-cache-{{ arch }}-{{ checksum "python.deps" }}
+          - py-cache-{{ arch }}-{{ .Branch }}
+          - py-cache-{{ arch }}-{{ .Environment.BASE_BRANCH }}
+      - run:
+          name: Install python dependencies
+          command: |
+            virtualenv venv
+            source venv/bin/activate
+            pip install -r requirements/develop.pip || pip install -r requirements/develop.pip
+      - save_cache:
+          key: py-cache-{{ arch }}-{{ checksum "python.deps" }}
+          paths:
+          - venv
+      - save_cache:
+          key: py-cache-{{ arch }}-{{ .Branch }}
+          paths:
+          - venv
+      - run:
+          name: Run tests
+          command: |
+            source venv/bin/activate
+            inv qa test --report
+      - store_test_results:
+          path: reports/
+      - store_artifacts:
+          path: reports/
+          destination: reports
+      - run:
+          name: Build a distributable package
+          command: |
+            source venv/bin/activate
+            # Build a wheel release
+            if [[ $CIRCLE_TAG ]]; then
+                # This is a tagged release
+                inv dist
+            elif [[ "$CIRCLE_BRANCH" == feature/* ]]; then
+                # This is a feature branch
+                inv dist -b $CIRCLE_BUILD_NUM+${CIRCLE_BRANCH#*/}
+            else
+                # This is a simple development build
+                inv dist -b $CIRCLE_BUILD_NUM
+            fi
+      - store_artifacts:
+          path: dist
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+            - venv
+
+  publish:
+    docker:
+      - image: udata/circleci
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install Twine
+          command: pip install twine
+      - deploy:
+          name: Publish on PyPI
+          command: twine upload --username "${PYPI_USERNAME}" --password "${PYPI_PASSWORD}" dist/*.whl
+
+  github:
+    docker:
+      - image: udata/circleci
+    environment:
+       BASH_ENV: /root/.bashrc
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Upload github release
+          command: gh_release
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+      - publish:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+          context: org-global
+      - github:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+          context: org-global
