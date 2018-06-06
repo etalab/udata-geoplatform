@@ -2,4 +2,4 @@
 
 ## Current (in progress)
 
-Initial release
+- Initial release
