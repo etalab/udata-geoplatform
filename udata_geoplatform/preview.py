@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from udata.core.dataset.preview import PreviewPlugin
 
 GEOP_PREFIX = 'geop'
