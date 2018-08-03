@@ -1,5 +1,9 @@
 # Changelog
 
+## Current (in progress)
+
+- Nothing yet
+
 ## 1.0.1 (2018-08-03)
 
 - Pass current locale to preview URL [#3](https://github.com/etalab/udata-geoplatform/pull/3)
