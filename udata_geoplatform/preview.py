@@ -1,9 +1,10 @@
+from udata.i18n import get_locale
 from udata.core.dataset.preview import PreviewPlugin
 
 GEOP_PREFIX = 'geop'
 RESOURCE_EXTRA = '{}:resource_id'.format(GEOP_PREFIX)
 DATASET_EXTRA = '{}:dataset_id'.format(GEOP_PREFIX)
-GEOP_URL_TEMPLATE = 'https://geo.data.gouv.fr/embed/datasets/{dataset_id}/resources/{resource_id}?lang=fr'  # noqa
+GEOP_URL_TEMPLATE = 'https://geo.data.gouv.fr/embed/datasets/{dataset_id}/resources/{resource_id}?lang={lang}'  # noqa
 
 
 class GeoplatformPreview(PreviewPlugin):
@@ -20,5 +21,6 @@ class GeoplatformPreview(PreviewPlugin):
     def preview_url(self, resource):
         return GEOP_URL_TEMPLATE.format(
             resource_id=self.get_resource_extra(resource),
-            dataset_id=self.get_dataset_extra(resource)
+            dataset_id=self.get_dataset_extra(resource),
+            lang=get_locale(),
         )
