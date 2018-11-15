@@ -13,5 +13,5 @@ pip install udata-geoplatform
 Then activate it in your `udata.cfg`:
 
 ```python
-PLUGINS = ['udata-geoplatform']
+PLUGINS = ['geoplatform']
 ```
