@@ -15,3 +15,9 @@ Then activate it in your `udata.cfg`:
 ```python
 PLUGINS = ['geoplatform']
 ```
+
+## Configuration
+
+You can control this plugin’s behavior with the following `udata.cfg` parameters:
+
+- **`GEOPLATFORM_URL`**: The URL to your `geoplatform` instance (without trailing slash). **ex:** `https://geo.data.gouv.fr`
