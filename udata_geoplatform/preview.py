@@ -1,3 +1,4 @@
+from flask import current_app
 from udata.i18n import get_locale
 from udata.core.dataset.preview import PreviewPlugin
 
