@@ -27,7 +27,7 @@ class GeoplatformPreview(PreviewPlugin):
     def can_preview(self, resource):
         dataset = resource.dataset
         return self.get_resource_extra(resource) and \
-               self.get_dataset_extra(dataset)
+            self.get_dataset_extra(dataset)
 
     def preview_url(self, resource):
         dataset = resource.dataset
