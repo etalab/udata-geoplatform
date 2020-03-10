@@ -2,7 +2,7 @@
 
 ## Current (in progress)
 
-- Migrate to python3 🐍 [#1](https://github.com/etalab/udata-geoplatform/pull/1)
+- Migrate to python3 🐍 [#61](https://github.com/etalab/udata-geoplatform/pull/61)
 
 ## 1.0.1 (2018-08-03)
 

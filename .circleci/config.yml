@@ -5,8 +5,8 @@ jobs:
   build:
     docker:
       - image: udata/circleci:2-alpine
-      - image: mongo:3.2
-      - image: redis
+      - image: circleci/mongo:3.6-stretch-ram
+      - image: redis:alpine
       - image: udata/elasticsearch:2.4.5
     environment:
        BASH_ENV: /root/.bashrc
@@ -72,7 +72,7 @@ jobs:
 
   publish:
     docker:
-      - image: udata/circleci:py3
+      - image: udata/circleci:2-alpine
     steps:
       - attach_workspace:
           at: .
@@ -85,7 +85,7 @@ jobs:
 
   github:
     docker:
-      - image: udata/circleci:py3
+      - image: udata/circleci:2-alpine
     environment:
        BASH_ENV: /root/.bashrc
     steps:
