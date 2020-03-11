@@ -1,13 +1,21 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
+import gc
 import pytest
 
 from udata.i18n import language
 from udata.core.dataset.factories import DatasetFactory, ResourceFactory
 
+
+@pytest.fixture
+def no_gc():
+    '''Prevent garbage collecting during test with anonymous objects (factories)'''
+    gc.disable()
+    yield
+    gc.collect()
+    gc.enable()
+
+
 pytestmark = [
-    pytest.mark.usefixtures('clean_db'),
+    pytest.mark.usefixtures('clean_db', 'no_gc'),
     pytest.mark.options(PLUGINS=['geoplatform']),
 ]
 
