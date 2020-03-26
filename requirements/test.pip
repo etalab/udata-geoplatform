@@ -1,4 +1,4 @@
-httpretty==0.9.7
+httpretty==1.0.2
 mock==3.0.5
 pytest-flask==0.15.0
 pytest-sugar==0.9.2
