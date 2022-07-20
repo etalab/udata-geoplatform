@@ -2,7 +2,7 @@
 
 ## Current (in progress)
 
-- Nothing yet
+- Replace mongo legacy image in CI [#78](https://github.com/etalab/udata-geoplatform/pull/78)
 
 ## 2.0.0 (2020-03-11)
 
