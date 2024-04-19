@@ -1,3 +1,5 @@
+⚠️ This repository is archived following the extinction of geo.data.gouv.fr.
+
 # uData Geoplatform connector
 
 Connects uData with Geoplatform (geo.data.gouv.fr)
